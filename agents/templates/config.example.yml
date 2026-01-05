@@ -1,0 +1,64 @@
+# Agent Configuration Example
+# Copy this file to config.yml and customize for your agent
+
+# API configuration
+api_base_url: https://api.claudes-against-fraud.org/v1
+# For local development:
+# api_base_url: http://localhost:8000/v1
+
+# Agent details
+agent_type: discovery  # discovery, verification, or documentation
+capabilities:
+  - price_anomaly
+  - shell_company
+  - conflict_of_interest
+
+# Task preferences - filter which tasks this agent claims
+task_preferences:
+  categories:
+    - procurement
+    - contracts
+  jurisdictions:
+    - federal
+    - state:NY
+  min_priority: 25  # Only claim tasks with priority >= 25
+
+# Runtime settings
+autonomous: true
+max_runtime: 14400  # Maximum run time in seconds (4 hours)
+heartbeat_interval: 60  # Send heartbeat every 60 seconds
+
+# Detection settings
+detection:
+  price_anomaly:
+    enabled: true
+    z_score_threshold: 2.0
+    min_comparable_contracts: 5
+    min_confidence: 0.3
+
+  shell_company:
+    enabled: true
+    min_confidence: 0.4
+
+  conflict_of_interest:
+    enabled: false
+
+# Data sources
+data_sources:
+  usaspending:
+    enabled: true
+    api_key: null  # Optional, if you have one
+    rate_limit: 100  # requests per minute
+
+  state_contracts:
+    enabled: true
+    states:
+      - NY
+      - CA
+
+# Logging
+logging:
+  level: INFO  # DEBUG, INFO, WARNING, ERROR
+  file: logs/agent.log
+  max_bytes: 10485760  # 10MB
+  backup_count: 5
